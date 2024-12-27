@@ -1,0 +1,19 @@
+# Virtual environment
+venv/
+
+# Environment variables
+*secrets.toml
+
+# Logs
+*.log
+
+# Databases
+*.db
+
+# macOS system files
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+
