@@ -71,4 +71,3 @@ st.button("Send", on_click=handle_user_input, disabled=not st.session_state.acti
 
 # Invisible element to act as padding 
 st.markdown("<div style='height: 200px;'></div>", unsafe_allow_html=True)
-
