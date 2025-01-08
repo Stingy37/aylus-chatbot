@@ -3,23 +3,17 @@ import pandas as pd
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 import pdfplumber
 
-
-# Initialize variables and paths
-context_data_folder = 'LLM_website_context'
-files_with_info = [f for f in os.listdir(context_data_folder) if f.endswith('.pdf') and not f.startswith('.')]
-
-
 # Metadata setup
-def set_doc_metadata(total_pages, index):
+def set_doc_metadata(total_pages, files_with_info, index):
     for page in total_pages:
         page.metadata['title'] = files_with_info[index] # Split into different files for each webpage for better metadata 
 
 
 # Load and split documents
-def load_documents(context_data_folder):
+def load_documents(context_data_folder, files_with_info):
     # Configure text splitter
     large_text_splitter = RecursiveCharacterTextSplitter(
         separators=["Scene"],
@@ -33,7 +27,7 @@ def load_documents(context_data_folder):
     for index, file in enumerate(files_with_info):
         loader = PyPDFLoader(os.path.join(context_data_folder, file))
         total_pages = loader.load_and_split(text_splitter=large_text_splitter)
-        set_doc_metadata(total_pages, index)
+        set_doc_metadata(total_pages, files_with_info, index)
         processed_total_pages += total_pages
     return processed_total_pages
 
@@ -52,7 +46,7 @@ def find_relevant_docs(query, database):
     return [relevant_page_content, metadata]
 
 
-# Extract tables from a PDF page
+# Extract tables from a PDF page (NOT USED IN THIS PROJECT)
 def extract_tables(page):
 
     extracted_tables = page.extract_tables()

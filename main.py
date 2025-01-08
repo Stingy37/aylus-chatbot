@@ -9,6 +9,7 @@ from chat_handler import (
     initialize_session_state,
     display_chat_history
 )
+from langchain_community.vectorstores import FAISS
 from logger import initialize_logger
 
 # Load environment variables
