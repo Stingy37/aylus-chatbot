@@ -9,7 +9,6 @@ from chat_handler import (
     initialize_session_state,
     display_chat_history
 )
-from file_upload import handle_file_upload
 from logger import initialize_logger
 
 # Load environment variables
@@ -37,18 +36,6 @@ if st.session_state.active_chat_id:
     st.session_state.messages = load_chat_messages(st.session_state.active_chat_id)
 else:
     st.session_state.messages = []
-
-# File uploader for PDFs, .py files, and images
-uploaded_files = st.file_uploader(
-    "Upload files",
-    type=["pdf", "py", "png", "jpg", "jpeg"],
-    accept_multiple_files=True,
-    key=f"file_uploader_{st.session_state.active_chat_id}"  # Unique key per chat_id
-)
-
-# Handle file upload
-if uploaded_files and st.session_state.active_chat_id:
-    handle_file_upload(uploaded_files, st.session_state.active_chat_id)
 
 # Display chat history
 display_chat_history()
