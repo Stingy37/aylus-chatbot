@@ -8,7 +8,6 @@ load_documents, create_database
 )
 
 # Initialize variables and paths
-openai.api_key = st.secrets["OPENAI_API_KEY"]
 context_data_folder = 'LLM_website_context'
 files_with_info = [f for f in os.listdir(context_data_folder) if f.endswith('.pdf') and not f.startswith('.')]
 
