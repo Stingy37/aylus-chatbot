@@ -54,14 +54,14 @@ set_custom_background('assets/white_background.jpg')
 # Initialize session state variables
 initialize_session_state()
 
+# Display chat history
+display_chat_history()
+
 # Handle user input first
 user_input = st.chat_input("Type your message here...")
 if user_input:
     st.session_state.input_box = user_input
     handle_user_input()
-
-# Display chat history
-display_chat_history()
 
 # Invisible element to act as padding 
 st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)

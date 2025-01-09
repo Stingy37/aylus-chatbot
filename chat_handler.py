@@ -8,6 +8,10 @@ import json
 
 from rag import find_relevant_docs
 
+# Paths to avatar images
+user_avatar_image = 'assets/user_icon_small.jpg'
+assistant_avatar_image = 'assets/assistant_icon_small.jpg'
+
 def initialize_session_state():
     if "model" not in st.session_state:
         st.session_state.model = "gpt-4-turbo"  # Default model
@@ -24,6 +28,7 @@ def process_system_instructions(system_instructions, user_input, vector_database
     return processed_system_instructions
 
 def handle_user_input():
+
     user_input = st.session_state.input_box
     system_instructions = st.session_state['system_instructions']
     vector_database = st.session_state['vector_database']
@@ -34,6 +39,8 @@ def handle_user_input():
         # Add user message to session state and display it first
         user_message = {"role": "user", "content": user_input.strip()}
         st.session_state.messages.append(user_message)
+        with st.chat_message(user_message["role"], avatar=user_avatar_image):
+            st.text(user_message["content"])
         
         messages = []
 
@@ -49,20 +56,36 @@ def handle_user_input():
         # Log the messages being sent to the API
         logging.info(f"Sending messages to OpenAI API:\n{json.dumps(messages, indent=2)}")
         
-        try:
-            # Generate GPT response
-            response = client.chat.completions.create(
-                model=st.session_state.model,
-                messages=messages
-                )
-            reply = response.choices[0].message.content
-            assistant_message = {"role": "assistant", "content": reply}
-            st.session_state.messages.append(assistant_message)
+        with st.chat_message("assistant", avatar=assistant_avatar_image):
+            # Create a placeholder
+            assistant_placeholder = st.empty()
 
-        except Exception as e:
-            # Handle exception
-            error_message = {"role": "assistant", "content": f"Error: {e}"}
-            st.session_state.messages.append(error_message)
+            # Initialize an empty reply
+            full_reply = ""
+
+            try:
+                # Generate GPT response with streaming
+                response = client.chat.completions.create(
+                    model=st.session_state.model,
+                    messages=messages,
+                    stream=True
+                )
+                
+                for chunk in response:
+                    delta = getattr(chunk.choices[0].delta, 'content', '')
+                    if delta:
+                        full_reply += delta
+                        assistant_placeholder.markdown(full_reply)
+
+                assistant_message = {"role": "assistant", "content": full_reply}
+                st.session_state.messages.append(assistant_message)
+
+
+            except Exception as e:
+                # Handle exception
+                error_message = {"role": "assistant", "content": f"Error: {e}"}
+                st.session_state.messages.append(error_message)
+
         # Clear input box
         st.session_state.input_box = ""
 
@@ -70,9 +93,6 @@ def handle_user_input():
         st.error("Please select or create a chat session.")
 
 def display_chat_history():
-    # Paths to avatar images
-    user_avatar_image = 'assets/user_icon_small.jpg'
-    assistant_avatar_image = 'assets/assistant_icon_small.jpg'
 
     for message in st.session_state.messages:
         if message["role"] == "user":
