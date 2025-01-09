@@ -54,7 +54,7 @@ set_custom_background('assets/white_background.jpg')
 # Initialize session state variables
 initialize_session_state()
 
-# Display chat history
+# Display chat history first, before adding new messages
 display_chat_history()
 
 # Handle user input first

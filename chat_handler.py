@@ -70,7 +70,7 @@ def handle_user_input():
                     messages=messages,
                     stream=True
                 )
-                
+
                 for chunk in response:
                     delta = getattr(chunk.choices[0].delta, 'content', '')
                     if delta:
@@ -92,8 +92,8 @@ def handle_user_input():
     else:
         st.error("Please select or create a chat session.")
 
+# Used to display previous chat messages (NOT displaying current interaction, which is handled in handle_user_input)
 def display_chat_history():
-
     for message in st.session_state.messages:
         if message["role"] == "user":
             avatar_image = user_avatar_image
