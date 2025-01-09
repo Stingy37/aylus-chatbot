@@ -120,8 +120,11 @@ def process_system_instructions(system_instructions, user_input, vector_database
       )
     return processed_system_instructions
 
-def handle_user_input(system_instructions, vector_database):
+def handle_user_input():
     user_input = st.session_state.input_box
+    system_instructions = st.session_state['system_instructions']
+    vector_database = st.session_state['vector_database']
+
     processed_system_instructions = process_system_instructions(system_instructions, user_input, vector_database)
 
     if user_input.strip() and st.session_state.active_chat_id:
@@ -170,9 +173,16 @@ def handle_user_input(system_instructions, vector_database):
         st.error("Please select or create a chat session.")
 
 def display_chat_history():
+    # Paths to avatar images
+    user_avatar_image = 'assets/user_icon_small.jpg'
+    assistant_avatar_image = 'assets/assistant_icon_small.jpg'
+
     for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            if message["role"] == "user":
+        if message["role"] == "user":
+            avatar_image = user_avatar_image
+            with st.chat_message(message["role"], avatar=avatar_image):
                 st.text(message["content"])
-            else:
+        else:
+            avatar_image = assistant_avatar_image
+            with st.chat_message(message["role"], avatar=avatar_image):
                 st.markdown(message["content"])

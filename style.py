@@ -22,22 +22,10 @@ def set_custom_background(background_image_path):
     }}
     /* Keep the main content area's default background */
     .block-container {{
-        background-color: rgba(14,17,23,0.2);
+        background-color: rgba(255,255,255,0.7);
         position: relative;
         padding-top: 2rem;
         backdrop-filter: blur(30px);
-    }}
-    /* Gradient transition */
-    .block-container::before {{
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -15%;
-        width: 130%;
-        height: 100%;
-        background: linear-gradient(to right, rgba(0,0,0,0), rgba(14,17,23,0.5) 20%, rgba(14,17,23,0.5) 80%, rgba(0,0,0,0));
-        pointer-events: none;
-        backdrop-filter: blur(10px);
     }}
     </style>
     '''
