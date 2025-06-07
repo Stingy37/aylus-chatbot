@@ -80,7 +80,6 @@ def handle_user_input():
                 assistant_message = {"role": "assistant", "content": full_reply}
                 st.session_state.messages.append(assistant_message)
 
-
             except Exception as e:
                 # Handle exception
                 error_message = {"role": "assistant", "content": f"Error: {e}"}

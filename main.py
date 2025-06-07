@@ -11,7 +11,7 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from logger import initialize_logger
 
-# Set system instructions
+# Set system instructions (Move to a seperate file to import later..)
 system_instructions = (
     "Answer my question based on the following text:"
     "({relevant_information_placeholder})"

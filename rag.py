@@ -48,7 +48,6 @@ def find_relevant_docs(query, database):
 
 # Extract tables from a PDF page (NOT USED IN THIS PROJECT)
 def extract_tables(page):
-
     extracted_tables = page.extract_tables()
     if extracted_tables:
         return pd.DataFrame(extracted_tables[0])
