@@ -1,0 +1,14 @@
+name: Keep Streamlit Awake
+
+on:
+  schedule:
+    # every 5 hours at minute 0 (UTC)
+    - cron: '0 */5 * * *'
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wake up Streamlit app
+        run: |
+          curl -m 10 -I https://aylus-chatbot-eq9gxr7znvagfcki3w9cgh.streamlit.app/ || true
