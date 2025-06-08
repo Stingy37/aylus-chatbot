@@ -40,7 +40,7 @@ def create_database(processed_total_pages, openai_api_key):
 
 # Find relevant documents
 def find_relevant_docs(query, database):
-    docs = database.similarity_search_with_score(query, k=5)
+    docs = database.similarity_search_with_score(query, k=10)
     relevant_page_content = [doc[0].page_content for doc in docs]
     metadata = [doc[0].metadata for doc in docs]
     return [relevant_page_content, metadata]

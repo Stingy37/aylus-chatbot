@@ -14,7 +14,7 @@ assistant_avatar_image = 'assets/assistant_icon_small.jpg'
 
 def initialize_session_state():
     if "model" not in st.session_state:
-        st.session_state.model = "gpt-4-turbo"  # Default model
+        st.session_state.model = "gpt-4o"  # Default model
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
