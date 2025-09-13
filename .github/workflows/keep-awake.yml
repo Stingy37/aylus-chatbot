@@ -2,16 +2,23 @@ name: keepalive
 
 on:
   schedule:
-    - cron: "0 */2 * * *"   
-  workflow_dispatch:         
+    - cron: "0 */2 * * *"   # every 2 hours (UTC)
+  workflow_dispatch:         # lets you run it manually to test
 
 jobs:
   ping:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Ping Streamlit app
+      - name: Ping Streamlit app (follow redirects)
         run: |
-          curl -sS -m 15 \
-            --retry 2 --retry-delay 5 --retry-connrefused \
-            "https://aylus-chatbot-eq9gxr7znvagfcki3w9cgh.streamlit.app/?ping=1" \
-            | head -c 200 || true
+          URL="https://aylus-chatbot-eq9gxr7znvagfcki3w9cgh.streamlit.app/?ping=1"
+          # Print HTTP status (doesn't fail the job)
+          STATUS=$(curl -sS -o /dev/null -m 30 -L -w "%{http_code}" \
+                   --retry 3 --retry-delay 5 --retry-connrefused "$URL")
+          echo "HTTP $STATUS"
+
+          # Fetch minimal body so logs show 'ok'
+          curl -sS -m 30 -L \
+            --retry 3 --retry-delay 5 --retry-connrefused \
+            "$URL" | head -c 200 || true
