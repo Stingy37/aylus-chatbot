@@ -11,6 +11,18 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from logger import initialize_logger
 
+# --------------- uptime ping -----------------
+# Read query params (works on new & older Streamlit)
+params = getattr(st, "query_params", None)
+if params is None:
+    params = st.experimental_get_query_params()
+
+# If this is a health ping, return immediately
+if params.get("ping") in (["1"], "1"):
+    st.write("ok")
+    st.stop()  # prevents the rest of the app from running
+
+
 # Set system instructions (Move to a seperate file to import later..)
 system_instructions = (
     "Answer my question based on the following text:"
